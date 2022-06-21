@@ -1,47 +1,40 @@
 'use strict';
 
-const { DOG, CAT } = require('../config/constants');
-
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('pets', {
+    return queryInterface.createTable('hosts', {
       id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
-      name: {
-        type: Sequelize.DataTypes.STRING,
-      },
-      type: {
-        type: Sequelize.DataTypes.ENUM(DOG, CAT),
-      },
-      pet_pic: {
-        type: Sequelize.DataTypes.STRING,
-      },
-      weight: {
-        type: Sequelize.DataTypes.INTEGER,
-      },
-      age: {
-        type: Sequelize.DataTypes.INTEGER,
-      },
-      species: {
-        type: Sequelize.DataTypes.STRING,
-      },
-      note: {
-        type: Sequelize.DataTypes.TEXT,
-      },
 
-      user_id: {
+      uId: {
+        type: Sequelize.DataTypes.STRING,
+        unique: true,
+      },
+      userId: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
-        references: {
-          model: {
-            tableName: 'users',
-          },
-          key: 'id',
-        },
+      },
+      address: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      district: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      sub_district: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      zip_code: {
+        type: Sequelize.DataTypes.INTEGER,
+      },
+      phon_number: {
+        type: Sequelize.DataTypes.INTEGER,
+      },
+      user_pic: {
+        type: Sequelize.DataTypes.STRING,
       },
 
       created_at: {
@@ -57,6 +50,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('pets');
+    return queryInterface.dropTable('hosts');
   },
 };

@@ -4,12 +4,15 @@ const { SINGLE_ROOM, CAPSULE, CAGE, DOG, CAT } = require('../config/constants');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('houses', {
+    return queryInterface.createTable('bookinghouses', {
       id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+      },
+      houseId: {
+        type: Sequelize.DataTypes.INTEGER,
       },
       name: {
         type: Sequelize.DataTypes.STRING,
@@ -77,12 +80,23 @@ module.exports = {
         defaultValue: false,
       },
 
-      user_id: {
+      booking_id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: {
-            tableName: 'users',
+            tableName: 'bookings',
+          },
+          key: 'id',
+        },
+      },
+
+      host_id: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: 'hosts',
           },
           key: 'id',
         },
@@ -101,6 +115,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('houses');
+    return queryInterface.dropTable('bookinghouses');
   },
 };

@@ -4,7 +4,7 @@ const { DOG, CAT } = require('../config/constants');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable('pets', {
+    return queryInterface.createTable('bookingpets', {
       id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
@@ -33,12 +33,12 @@ module.exports = {
         type: Sequelize.DataTypes.TEXT,
       },
 
-      user_id: {
+      booking_id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
         references: {
           model: {
-            tableName: 'users',
+            tableName: 'bookings',
           },
           key: 'id',
         },
@@ -57,6 +57,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('pets');
+    return queryInterface.dropTable('bookingpets');
   },
 };
