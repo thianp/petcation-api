@@ -1,17 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define(
-    'User',
+  const Bookingcustomer = sequelize.define(
+    'Bookingcustomer',
     {
       uId: {
         type: DataTypes.STRING,
         unique: true,
       },
-      password: {
-        type: DataTypes.STRING,
+      userId: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
       },
       address: {
         type: DataTypes.STRING,
@@ -19,16 +16,16 @@ module.exports = (sequelize, DataTypes) => {
       district: {
         type: DataTypes.STRING,
       },
-      subDistrict: {
+      sub_district: {
         type: DataTypes.STRING,
       },
-      zipCode: {
+      zip_code: {
         type: DataTypes.INTEGER,
       },
-      phonNumber: {
+      phon_number: {
         type: DataTypes.INTEGER,
       },
-      userPic: {
+      user_pic: {
         type: DataTypes.STRING,
       },
     },
@@ -37,19 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  User.associate = (models) => {
-    User.hasMany(models.Pet, {
+  Bookingcustomer.associate = (models) => {
+    Bookingcustomer.belongsTo(models.Booking, {
       foreignKey: {
-        name: 'userId',
-        allowNull: false,
-      },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
-    });
-
-    User.hasOne(models.House, {
-      foreignKey: {
-        name: 'userId',
+        name: 'bookingId',
         allowNull: false,
       },
       onUpdate: 'RESTRICT',
@@ -57,5 +45,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return User;
+  return Bookingcustomer;
 };
