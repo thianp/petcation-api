@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      uId: {
+      u_id: {
         type: Sequelize.DataTypes.STRING,
         unique: true,
       },
