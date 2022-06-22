@@ -13,3 +13,7 @@ exports.SUCCESSFUL = 'SUCCESSFUL';
 exports.PENDING = 'PENDING';
 
 exports.CANCLE = 'CANCLE';
+
+exports.CLOSE = 'CLOSE';
+
+exports.OPEN = 'OPEN';

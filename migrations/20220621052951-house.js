@@ -1,6 +1,14 @@
 'use strict';
 
-const { SINGLE_ROOM, CAPSULE, CAGE, DOG, CAT } = require('../config/constants');
+const {
+  SINGLE_ROOM,
+  CAPSULE,
+  CAGE,
+  DOG,
+  CAT,
+  CLOSE,
+  OPEN,
+} = require('../config/constants');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -75,6 +83,10 @@ module.exports = {
       isAirFilter: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      stauts: {
+        type: Sequelize.DataTypes.ENUM(OPEN, CLOSE),
+        defaultValue: CLOSE,
       },
 
       user_id: {

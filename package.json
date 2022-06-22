@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +22,8 @@
     "omise": "^0.8.5",
     "sequelize": "^6.21.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
   }
 }
