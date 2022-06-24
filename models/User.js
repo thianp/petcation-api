@@ -12,6 +12,13 @@ module.exports = (sequelize, DataTypes) => {
       lastName: {
         type: DataTypes.STRING,
       },
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -31,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       zipCode: {
         type: DataTypes.INTEGER,
       },
-      phonNumber: {
+      phoneNumber: {
         type: DataTypes.INTEGER,
       },
       userPic: {

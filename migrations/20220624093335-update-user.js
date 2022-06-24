@@ -9,15 +9,18 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     return Promise.all([
-      queryInterface.addColumn("users", "firstName", {
+      queryInterface.addColumn("users", "first_name", {
         type: Sequelize.STRING,
       }),
-      queryInterface.addColumn("users", "lastName", {
+      queryInterface.addColumn("users", "last_name", {
         type: Sequelize.STRING,
       }),
+      queryInterface.addColumn("users", "email", {
+        type: Sequelize.STRING,
+      }),
+      queryInterface.renameColumn("users", "phon_number", "phone_number"),
     ]);
   },
-
   async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
@@ -26,8 +29,9 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     return Promise.all([
-      queryInterface.removeColumn("users", "firstName"),
-      queryInterface.removeColumn("users", "lastName"),
+      queryInterface.removeColumn("users", "first_name"),
+      queryInterface.removeColumn("users", "last_name"),
+      queryInterface.removeColumn("users", "email"),
     ]);
   },
 };
