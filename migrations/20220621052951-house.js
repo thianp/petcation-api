@@ -25,66 +25,66 @@ module.exports = {
       type: {
         type: Sequelize.DataTypes.ENUM(SINGLE_ROOM, CAPSULE, CAGE),
       },
-      petType: {
+      pet_type: {
         type: Sequelize.DataTypes.ENUM(DOG, CAT),
       },
       price: {
         type: Sequelize.DataTypes.INTEGER,
       },
-      foodPrice: {
+      food_price: {
         type: Sequelize.DataTypes.INTEGER,
       },
       limit: {
         type: Sequelize.DataTypes.INTEGER,
       },
-      checkInTime: {
+      check_in_time: {
         type: Sequelize.DataTypes.DATE,
       },
-      checkOutTime: {
+      check_out_time: {
         type: Sequelize.DataTypes.DATE,
       },
-      petFood: {
+      pet_food: {
         type: Sequelize.DataTypes.STRING,
       },
-      dailySchedule: {
+      daily_schedule: {
         type: Sequelize.DataTypes.STRING,
       },
       image: {
         type: Sequelize.DataTypes.STRING,
       },
-      isPetFood: {
+      is_pet_food: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isGrooming: {
+      is_grooming: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isAirCondition: {
+      is_air_condition: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isPetStaff: {
+      is_pet_staff: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isPetTraining: {
+      is_pet_training: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isPickupDropOff: {
+      is_pickup_drop_off: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isLitterChangedDaily: {
+      is_litter_changed_daily: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isAirFilter: {
+      is_air_filter: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      stauts: {
+      status: {
         type: Sequelize.DataTypes.ENUM(OPEN, CLOSE),
         defaultValue: CLOSE,
       },

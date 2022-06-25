@@ -11,17 +11,17 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
       },
-      checkInDate: {
+      check_in_date: {
         type: Sequelize.DataTypes.DATEONLY,
       },
-      checkOutDate: {
+      check_out_date: {
         type: Sequelize.DataTypes.DATEONLY,
       },
-      userId: {
+      user_id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },
-      houseId: {
+      house_id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },

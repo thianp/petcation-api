@@ -13,6 +13,19 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
         unique: true,
       },
+      email: {
+        type: Sequelize.DataTypes.STRING,
+        unique: true,
+        validate: {
+          isEmail: true,
+        },
+      },
+      first_name: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      last_name: {
+        type: Sequelize.DataTypes.STRING,
+      },
       password: {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
@@ -32,7 +45,7 @@ module.exports = {
       zip_code: {
         type: Sequelize.DataTypes.INTEGER,
       },
-      phon_number: {
+      phone_number: {
         type: Sequelize.DataTypes.INTEGER,
       },
       user_pic: {

@@ -10,13 +10,19 @@ module.exports = {
         primaryKey: true,
       },
 
-      uId: {
+      u_id: {
         type: Sequelize.DataTypes.STRING,
         unique: true,
       },
-      userId: {
+      user_id: {
         type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
+      },
+      first_name: {
+        type: Sequelize.DataTypes.STRING,
+      },
+      last_name: {
+        type: Sequelize.DataTypes.STRING,
       },
       address: {
         type: Sequelize.DataTypes.STRING,

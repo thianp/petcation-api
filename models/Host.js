@@ -10,22 +10,28 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      firstName: {
+        type: DataTypes.STRING,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+      },
       address: {
         type: DataTypes.STRING,
       },
       district: {
         type: DataTypes.STRING,
       },
-      sub_district: {
+      subDistrict: {
         type: DataTypes.STRING,
       },
-      zip_code: {
+      zipCode: {
         type: DataTypes.INTEGER,
       },
-      phon_number: {
+      phonNumber: {
         type: DataTypes.INTEGER,
       },
-      user_pic: {
+      userPic: {
         type: DataTypes.STRING,
       },
     },

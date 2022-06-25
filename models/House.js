@@ -1,4 +1,12 @@
-const { DOG, CAT, SINGLE_ROOM, CAPSULE, CAGE } = require('../config/constants');
+const {
+  DOG,
+  CAT,
+  SINGLE_ROOM,
+  CAPSULE,
+  CAGE,
+  OPEN,
+  CLOSE,
+} = require('../config/constants');
 
 module.exports = (sequelize, DataTypes) => {
   const House = sequelize.define(
@@ -68,6 +76,10 @@ module.exports = (sequelize, DataTypes) => {
       isAirFilter: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+      },
+      status: {
+        type: DataTypes.ENUM(OPEN, CLOSE),
+        defaultValue: CLOSE,
       },
     },
     {

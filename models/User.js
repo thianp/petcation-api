@@ -1,16 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
-    "User",
+    'User',
     {
       uId: {
         type: DataTypes.STRING,
         unique: true,
-      },
-      firstName: {
-        type: DataTypes.STRING,
-      },
-      lastName: {
-        type: DataTypes.STRING,
       },
       email: {
         type: DataTypes.STRING,
@@ -18,6 +12,12 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isEmail: true,
         },
+      },
+      firstName: {
+        type: DataTypes.STRING,
+      },
+      lastName: {
+        type: DataTypes.STRING,
       },
       password: {
         type: DataTypes.STRING,
@@ -53,20 +53,20 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = (models) => {
     User.hasMany(models.Pet, {
       foreignKey: {
-        name: "userId",
+        name: 'userId',
         allowNull: false,
       },
-      onUpdate: "RESTRICT",
-      onDelete: "RESTRICT",
+      onUpdate: 'RESTRICT',
+      onDelete: 'RESTRICT',
     });
 
     User.hasOne(models.House, {
       foreignKey: {
-        name: "userId",
+        name: 'userId',
         allowNull: false,
       },
-      onUpdate: "RESTRICT",
-      onDelete: "RESTRICT",
+      onUpdate: 'RESTRICT',
+      onDelete: 'RESTRICT',
     });
   };
 

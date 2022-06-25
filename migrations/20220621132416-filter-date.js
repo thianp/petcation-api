@@ -12,7 +12,7 @@ module.exports = {
       date: {
         type: Sequelize.DataTypes.DATE,
       },
-      houseId: {
+      house_id: {
         type: Sequelize.DataTypes.INTEGER,
       },
       amount: {
@@ -21,7 +21,7 @@ module.exports = {
       limit: {
         type: Sequelize.DataTypes.INTEGER,
       },
-      bookingId: {
+      booking_id: {
         type: Sequelize.DataTypes.INTEGER,
       },
 

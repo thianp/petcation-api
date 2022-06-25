@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.ENUM(DOG, CAT),
       },
-      pet_pic: {
+      petPic: {
         type: DataTypes.STRING,
       },
       weight: {
