@@ -11,6 +11,7 @@ const userRoute = require("./routes/userRoute");
 const petRoute = require("./routes/petRoute");
 const houseRoute = require("./routes/houseRoute");
 const bookingRoute = require("./routes/bookingRoute");
+const addressRoute = require("./routes/addressRoute");
 
 const errorMiddleware = require("./middlewares/error");
 const notFoundMiddleware = require("./middlewares/notFound");
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/auth", authRoute);
+app.use("/address", addressRoute);
 app.use("/users", authenticate, userRoute);
 app.use("/pets", authenticate, petRoute);
 app.use("/houses", authenticate, houseRoute);
