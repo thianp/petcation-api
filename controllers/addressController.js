@@ -11,10 +11,10 @@ exports.getProvinces = async (req, res, next) => {
 
 exports.getDistricts = async (req, res, next) => {
   try {
-    let district = await District.findAll({
-      where: { districtId: req.params.provinceId },
+    let districts = await District.findAll({
+      where: { provinceId: req.params.provinceId },
     });
-    res.json({ district });
+    res.json({ districts });
   } catch (err) {
     next(err);
   }
@@ -23,7 +23,7 @@ exports.getDistricts = async (req, res, next) => {
 exports.getSubDistricts = async (req, res, next) => {
   try {
     let subDistricts = await SubDistrict.findAll({
-      where: { subDistrictId: req.params.districtId },
+      where: { districtId: req.params.districtId },
     });
     res.json({ subDistricts });
   } catch (err) {

@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const SubDistrict = sequelize.define(
-    'SubDistrict',
+    "SubDistrict",
     {
       zipCode: {
         type: DataTypes.INTEGER,
@@ -17,17 +17,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       underscored: true,
+      tableName: "subdistricts",
     }
   );
 
   SubDistrict.associate = (models) => {
     SubDistrict.belongsTo(models.District, {
       foreignKey: {
-        name: 'districtId',
+        name: "districtId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
   };
 
