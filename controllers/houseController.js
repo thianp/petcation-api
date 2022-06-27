@@ -1,16 +1,17 @@
-const { Province, District, SubDistrict } = require("../models");
+const { House, District, SubDistrict } = require("../models");
+const createError = require("../utils/createError");
 
-exports.getHouse = async (req, res, next) => {
-  try {
-    res.status(200).json({});
-  } catch (err) {
-    next(err);
-  }
-};
 exports.getHouseByUserId = async (req, res, next) => {
   try {
-    const { test } = req.body;
-    res.status(200).json({ test });
+    const { id } = req.user;
+
+    const myHouse = await House.findOne({ where: { userId: id } });
+
+    if (!myHouse) {
+      createError("My House not found", 400);
+    }
+
+    res.status(200).json(myHouse);
   } catch (err) {
     next(err);
   }
