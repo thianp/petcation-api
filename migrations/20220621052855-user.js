@@ -36,6 +36,9 @@ module.exports = {
       address: {
         type: Sequelize.DataTypes.STRING,
       },
+      province: {
+        type: Sequelize.DataTypes.STRING,
+      },
       district: {
         type: Sequelize.DataTypes.STRING,
       },

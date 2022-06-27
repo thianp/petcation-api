@@ -34,14 +34,17 @@ module.exports = {
       food_price: {
         type: Sequelize.DataTypes.INTEGER,
       },
+      size: {
+        type: Sequelize.DataTypes.INTEGER,
+      },
       limit: {
         type: Sequelize.DataTypes.INTEGER,
       },
       check_in_time: {
-        type: Sequelize.DataTypes.DATE,
+        type: Sequelize.DataTypes.STRING,
       },
       check_out_time: {
-        type: Sequelize.DataTypes.DATE,
+        type: Sequelize.DataTypes.STRING,
       },
       pet_food: {
         type: Sequelize.DataTypes.STRING,
