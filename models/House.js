@@ -27,14 +27,17 @@ module.exports = (sequelize, DataTypes) => {
       foodPrice: {
         type: DataTypes.INTEGER,
       },
+      size: {
+        type: DataTypes.INTEGER,
+      },
       limit: {
         type: DataTypes.INTEGER,
       },
       checkInTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
       },
       checkOutTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
       },
       petFood: {
         type: DataTypes.STRING,
