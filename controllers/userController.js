@@ -22,11 +22,32 @@ exports.getUser = async (req, res, next) => {
   }
 };
 
-exports.createProfileUser = async (req, res, next) => {
+// exports.updateProfileUser = async (req, res, next) => {
+//   try {
+//     const { firstName, lastName, phoneNumber, address, userId } = req.body;
+
+//     let image;
+//     if (req.file) {
+//       const userprofile = await cloudinary.upload(req.file.path);
+//       image = userprofile.secure_url;
+//     }
+
+//     const profileUser = await Product.findOne({
+//       where: { id: userId },
+//     });
+//     userprofile.save();
+//     res.status(201).json({ profileUser });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
+exports.updateProfile = async (req, res, next) => {
   try {
     const {
       firstName,
       lastName,
+      email,
       phoneNumber,
       province,
       district,
@@ -35,25 +56,26 @@ exports.createProfileUser = async (req, res, next) => {
       address,
     } = req.body;
 
-    let image;
+    let userPic;
     if (req.file) {
       const result = await cloudinary.upload(req.file.path);
-      image = result.secure_url;
+      userPic = result.secure_url;
     }
-
-    const profileUser = await Product.findOne({
+    const updateValue = {
       firstName,
       lastName,
       phoneNumber,
+      email,
       province,
       district,
       subDistrict,
       zipCode,
       address,
-      image,
-    });
+      userPic,
+    };
 
-    res.status(201).json({ profileUser });
+    await User.update(updateValue, { where: { id: req.user.id } });
+    res.json(updateValue);
   } catch (err) {
     next(err);
   }
