@@ -8,10 +8,41 @@ const genToken = (payload) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
+
+  exports.googleLogin = async (req, res, next) => {
+    try {
+      const { googleData } = req.body;
+
+      const payload = jwt.decode(googleData);
+      
+      const existingUser = await User.findOne({
+        where: { uId: payload.sub },
+      });
+      if (!existingUser) {
+        await User.create({
+          firstName: payload.given_name,
+          lastName: payload.family_name,
+          email: payload.email,
+          userPic: payload.picture,
+        uId: payload.sub,
+        });
+      }
+
+      const user = await User.findOne({
+        where: { uId: payload.sub },
+      });
+
+      const token = genToken({ id: user.id });
+      res.status(200).json({ token });
+    } catch (err) {
+      next(err);
+    }
+  };
+
 exports.register = async (req, res, next) => {
   try {
-    const { uId, password, confirmPassword } = req.body;
-
+    const { uId,email, password, confirmPassword } = req.body;
+console.log(email)
     if (!uId) {
       createError("uId is required", 400);
     }
@@ -35,7 +66,7 @@ exports.register = async (req, res, next) => {
 
     const user = await User.create({
       uId,
-
+      email,
       password: hashedPassword,
     });
 
