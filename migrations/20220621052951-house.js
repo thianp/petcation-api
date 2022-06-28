@@ -55,6 +55,9 @@ module.exports = {
       image: {
         type: Sequelize.DataTypes.STRING,
       },
+      other: {
+        type: Sequelize.DataTypes.STRING,
+      },
       is_pet_food: {
         type: Sequelize.DataTypes.BOOLEAN,
         defaultValue: false,
