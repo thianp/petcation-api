@@ -53,7 +53,7 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
       },
       image: {
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.TEXT,
       },
       other: {
         type: Sequelize.DataTypes.STRING,
