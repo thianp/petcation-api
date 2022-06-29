@@ -9,6 +9,7 @@ exports.getUser = async (req, res, next) => {
       where: {
         id,
       },
+      attributes: { exclude: ["password"] },
     });
     if (!user) {
       createError(404, "User not found");
@@ -64,7 +65,7 @@ exports.updateProfile = async (req, res, next) => {
       firstName,
       lastName,
       phoneNumber,
-      email,
+
       province: provinces,
       district: districts,
       subDistrict: subDistricts,
