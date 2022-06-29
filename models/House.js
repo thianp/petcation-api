@@ -48,6 +48,9 @@ module.exports = (sequelize, DataTypes) => {
       image: {
         type: DataTypes.STRING,
       },
+      other: {
+        type: DataTypes.STRING,
+      },
       isPetFood: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
