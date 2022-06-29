@@ -64,18 +64,11 @@ exports.updateProfile = async (req, res, next) => {
       firstName,
       lastName,
       phoneNumber,
-<<<<<<< HEAD
-      province,
-      district,
-      subDistrict,
-      zipCode,
-=======
       email,
       province: provinces,
       district: districts,
       subDistrict: subDistricts,
       zipCode: zipCodes,
->>>>>>> 4f656b821c033fbfcedccccfbf6a23c0e1de53c9
       address,
       userPic,
     };
