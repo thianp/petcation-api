@@ -9,6 +9,7 @@ exports.getUser = async (req, res, next) => {
       where: {
         id,
       },
+      attributes: { exclude: ["password"] },
     });
     if (!user) {
       createError(404, "User not found");
@@ -47,7 +48,6 @@ exports.updateProfile = async (req, res, next) => {
     const {
       firstName,
       lastName,
-      email,
       phoneNumber,
       provinces,
       districts,
@@ -65,7 +65,7 @@ exports.updateProfile = async (req, res, next) => {
       firstName,
       lastName,
       phoneNumber,
-      email,
+
       province: provinces,
       district: districts,
       subDistrict: subDistricts,
@@ -74,8 +74,8 @@ exports.updateProfile = async (req, res, next) => {
       userPic,
     };
 
-    await User.update(updateValue, { where: { id: req.user.id } });
-    res.json(updateValue);
+    const user = await User.update(updateValue, { where: { id: req.user.id } });
+    res.json(user);
   } catch (err) {
     next(err);
   }
