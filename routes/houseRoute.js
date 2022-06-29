@@ -1,18 +1,17 @@
-const express = require('express');
-const upload = require('../middlewares/upload');
+const express = require("express");
+const upload = require("../middlewares/upload");
 
-const houseController = require('../controllers/houseController');
+const houseController = require("../controllers/houseController");
 
 const router = express.Router();
 
-router.get('/', houseController.getHouse);
-router.get('/user', houseController.getHouseByUserId);
+router.get("/user", houseController.getHouseByUserId);
 router.post(
-  '/create',
-  upload.fields([{ name: 'cover', maxCount: 7 }]),
+  "/create",
+  upload.fields([{ name: "cover", maxCount: 7 }]),
   houseController.createHouse
 );
-router.patch('/update', houseController.updateHouse);
-router.delete('/', houseController.deleteHouse);
+router.patch("/update", houseController.updateHouse);
+router.delete("/", houseController.deleteHouse);
 
 module.exports = router;
