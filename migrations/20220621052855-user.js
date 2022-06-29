@@ -49,7 +49,7 @@ module.exports = {
         type: Sequelize.DataTypes.INTEGER,
       },
       phone_number: {
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.STRING,
       },
       user_pic: {
         type: Sequelize.DataTypes.STRING,
