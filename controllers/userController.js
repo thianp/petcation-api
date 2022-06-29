@@ -74,8 +74,8 @@ exports.updateProfile = async (req, res, next) => {
       userPic,
     };
 
-    await User.update(updateValue, { where: { id: req.user.id } });
-    res.json(updateValue);
+    const user = await User.update(updateValue, { where: { id: req.user.id } });
+    res.json(user);
   } catch (err) {
     next(err);
   }
