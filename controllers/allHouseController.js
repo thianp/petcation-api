@@ -19,7 +19,9 @@ exports.getHouseById = async (req, res, next) => {
     const { id } = req.params;
     const house = await House.findOne({
       where: { id },
-      include: [{ model: User, attributes: {exclude: ['uId', 'email', 'password']}}],
+      include: [
+        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
+      ],
     });
     console.log(id);
     if (!house) {
