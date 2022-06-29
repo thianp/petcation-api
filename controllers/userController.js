@@ -47,7 +47,6 @@ exports.updateProfile = async (req, res, next) => {
     const {
       firstName,
       lastName,
-      email,
       phoneNumber,
       province,
       district,
@@ -65,7 +64,6 @@ exports.updateProfile = async (req, res, next) => {
       firstName,
       lastName,
       phoneNumber,
-      email,
       province,
       district,
       subDistrict,

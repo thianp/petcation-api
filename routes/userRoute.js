@@ -6,6 +6,6 @@ const upload = require("../middlewares/upload");
 
 router.get("/", userController.getUser);
 
-router.patch("/update", upload.single("image"), userController.updateProfile);
+router.patch("/update", upload.single("userPic"), userController.updateProfile);
 
 module.exports = router;
