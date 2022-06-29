@@ -28,10 +28,6 @@ module.exports = {
       },
       password: {
         type: Sequelize.DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
       },
       address: {
         type: Sequelize.DataTypes.STRING,
