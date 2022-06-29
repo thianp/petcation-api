@@ -9,36 +9,6 @@ const genToken = (payload) =>
   });
 
 
-  exports.googleLogin = async (req, res, next) => {
-    try {
-      const { googleData } = req.body;
-
-      const payload = jwt.decode(googleData);
-      
-      const existingUser = await User.findOne({
-        where: { uId: payload.sub },
-      });
-      if (!existingUser) {
-        await User.create({
-          firstName: payload.given_name,
-          lastName: payload.family_name,
-          email: payload.email,
-          userPic: payload.picture,
-        uId: payload.sub,
-        });
-      }
-
-      const user = await User.findOne({
-        where: { uId: payload.sub },
-      });
-
-      const token = genToken({ id: user.id });
-      res.status(200).json({ token });
-    } catch (err) {
-      next(err);
-    }
-  };
-
 exports.register = async (req, res, next) => {
   try {
     const { uId,email, password, confirmPassword } = req.body;
