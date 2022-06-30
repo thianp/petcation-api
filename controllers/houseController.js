@@ -43,26 +43,45 @@ exports.createHouse = async (req, res, next) => {
       isAirFilter,
     } = req.body;
 
-    let allPic;
+    let allPic = [];
 
-    if (req.files.cover) {
-      const coverRes = await cloudinary.upload(req.files.cover[0].path);
-      const res1 = await cloudinary.upload(req.files.cover[1].path);
-      const res2 = await cloudinary.upload(req.files.cover[2].path);
-      const res3 = await cloudinary.upload(req.files.cover[3].path);
-      const res4 = await cloudinary.upload(req.files.cover[4].path);
-      const res5 = await cloudinary.upload(req.files.cover[5].path);
-      const res6 = await cloudinary.upload(req.files.cover[6].path);
+    if (req?.files?.cover) {
+      let coverRes;
+      let res1;
+      let res2;
+      let res3;
+      let res4;
+      let res5;
+      let res6;
 
-      allPic = `[
-        ${coverRes.secure_url},
-        ${res1.secure_url},
-        ${res2.secure_url},
-        ${res3.secure_url},
-        ${res4.secure_url},
-        ${res5.secure_url},
-        ${res6.secure_url},
-      ]`;
+      if (req?.files?.cover[0]) {
+        coverRes = await cloudinary.upload(req.files.cover[0].path);
+        allPic.push(coverRes.secure_url);
+      }
+      if (req?.files?.cover[1]) {
+        res1 = await cloudinary.upload(req.files.cover[1].path);
+        allPic.push(res1.secure_url);
+      }
+      if (req?.files?.cover[2]) {
+        res2 = await cloudinary.upload(req.files.cover[2].path);
+        allPic.push(res2.secure_url);
+      }
+      if (req?.files?.cover[3]) {
+        res3 = await cloudinary.upload(req.files.cover[3].path);
+        allPic.push(res3.secure_url);
+      }
+      if (req?.files?.cover[4]) {
+        res4 = await cloudinary.upload(req.files.cover[4].path);
+        allPic.push(res4.secure_url);
+      }
+      if (req?.files?.cover[5]) {
+        res5 = await cloudinary.upload(req.files.cover[5].path);
+        allPic.push(res5.secure_url);
+      }
+      if (req?.files?.cover[6]) {
+        res6 = await cloudinary.upload(req.files.cover[6].path);
+        allPic.push(res6.secure_url);
+      }
     }
 
     const house = await House.create({
@@ -78,7 +97,7 @@ exports.createHouse = async (req, res, next) => {
       checkOutTime,
       petFood,
       dailySchedule,
-      image: allPic,
+      image: `[${allPic}]`,
       other,
       isPetFood,
       isGrooming,
@@ -93,14 +112,28 @@ exports.createHouse = async (req, res, next) => {
   } catch (err) {
     next(err);
   } finally {
-    if (req.files.cover) {
-      fs.unlinkSync(req.files.cover[0].path);
-      fs.unlinkSync(req.files.cover[1].path);
-      fs.unlinkSync(req.files.cover[2].path);
-      fs.unlinkSync(req.files.cover[3].path);
-      fs.unlinkSync(req.files.cover[4].path);
-      fs.unlinkSync(req.files.cover[5].path);
-      fs.unlinkSync(req.files.cover[6].path);
+    if (req?.files?.cover) {
+      if (req?.files?.cover[0]) {
+        fs.unlinkSync(req.files.cover[0].path);
+      }
+      if (req?.files?.cover[1]) {
+        fs.unlinkSync(req.files.cover[1].path);
+      }
+      if (req?.files?.cover[2]) {
+        fs.unlinkSync(req.files.cover[2].path);
+      }
+      if (req?.files?.cover[3]) {
+        fs.unlinkSync(req.files.cover[3].path);
+      }
+      if (req?.files?.cover[4]) {
+        fs.unlinkSync(req.files.cover[4].path);
+      }
+      if (req?.files?.cover[5]) {
+        fs.unlinkSync(req.files.cover[5].path);
+      }
+      if (req?.files?.cover[6]) {
+        fs.unlinkSync(req.files.cover[6].path);
+      }
     }
   }
 };
