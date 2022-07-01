@@ -15,7 +15,6 @@ module.exports = {
       },
       email: {
         type: Sequelize.DataTypes.STRING,
-        unique: true,
         validate: {
           isEmail: true,
         },

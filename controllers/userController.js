@@ -1,6 +1,7 @@
-const { User } = require("../models");
-const createError = require("../utils/createError.js");
-const cloudinary = require("../utils/cloudinary");
+const { User } = require('../models');
+const createError = require('../utils/createError.js');
+const cloudinary = require('../utils/cloudinary');
+const fs = require('fs');
 
 exports.getUser = async (req, res, next) => {
   try {
@@ -9,10 +10,10 @@ exports.getUser = async (req, res, next) => {
       where: {
         id,
       },
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ['password'] },
     });
     if (!user) {
-      createError(404, "User not found");
+      createError(404, 'User not found');
     }
     console.log(user);
     res.status(200).json({
@@ -78,5 +79,9 @@ exports.updateProfile = async (req, res, next) => {
     res.json(user);
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
