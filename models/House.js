@@ -43,13 +43,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       dailySchedule: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       image: {
         type: DataTypes.TEXT,
       },
       other: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       isPetFood: {
         type: DataTypes.BOOLEAN,

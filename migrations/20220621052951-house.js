@@ -50,13 +50,13 @@ module.exports = {
         type: Sequelize.DataTypes.STRING,
       },
       daily_schedule: {
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.TEXT,
       },
       image: {
         type: Sequelize.DataTypes.TEXT,
       },
       other: {
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.TEXT,
       },
       is_pet_food: {
         type: Sequelize.DataTypes.BOOLEAN,

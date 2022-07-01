@@ -22,23 +22,29 @@ module.exports = (sequelize, DataTypes) => {
       foodPrice: {
         type: DataTypes.INTEGER,
       },
+      size: {
+        type: DataTypes.INTEGER,
+      },
       limit: {
         type: DataTypes.INTEGER,
       },
       checkInTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
       },
       checkOutTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
       },
       petFood: {
         type: DataTypes.STRING,
       },
       dailySchedule: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
       },
       image: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
+      },
+      other: {
+        type: DataTypes.TEXT,
       },
       isPetFood: {
         type: DataTypes.BOOLEAN,

@@ -97,7 +97,7 @@ exports.createHouse = async (req, res, next) => {
       checkOutTime,
       petFood,
       dailySchedule,
-      image: `[${allPic}]`,
+      image: `[${allPic.map((el) => `"${el}"`)}]`,
       other,
       isPetFood,
       isGrooming,
