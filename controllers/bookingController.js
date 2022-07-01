@@ -35,7 +35,7 @@ exports.createBooking = async (req, res, next) => {
       let createdCharge;
       await omise.charges.create(
         {
-          amount: 100000,
+          amount: +price * 100,
           currency: "thb",
           card: token,
         },
@@ -148,6 +148,61 @@ exports.createBooking = async (req, res, next) => {
 
       res.json({ booking });
     });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getSingleBooking = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
+    const booking = await Booking.findOne({ where: { id: bookingId } });
+    res.json({ booking });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getGuestBookings = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const bookings = await Booking.findAll({ where: { userId: id } });
+    res.json({ bookings });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getHostBookings = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const hostHouse = await House.findOne({ where: { userId: id } });
+    if (!hostHouse) {
+      createError("host's house is not found");
+    }
+    const bookings = await Booking.findAll({
+      where: { houseId: hostHouse.id },
+    });
+    res.json({ bookings });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updateBookingStatus = async (req, res, next) => {
+  try {
+    const { bookingId } = req.params;
+    const { id } = req.user;
+
+    const { status } = req.body;
+
+    const booking = await Booking.findOne({ where: { id: bookingId } });
+    if (booking.userId !== id) {
+      createError("you are unauthorized");
+    }
+    booking.status = status;
+    booking.save();
+    res.json({ updateValue: status });
   } catch (err) {
     next(err);
   }
