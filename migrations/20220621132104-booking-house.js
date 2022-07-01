@@ -29,23 +29,29 @@ module.exports = {
       food_price: {
         type: Sequelize.DataTypes.INTEGER,
       },
+      size: {
+        type: Sequelize.DataTypes.INTEGER,
+      },
       limit: {
         type: Sequelize.DataTypes.INTEGER,
       },
       check_in_time: {
-        type: Sequelize.DataTypes.DATE,
+        type: Sequelize.DataTypes.STRING,
       },
       check_out_time: {
-        type: Sequelize.DataTypes.DATE,
+        type: Sequelize.DataTypes.STRING,
       },
       pet_food: {
         type: Sequelize.DataTypes.STRING,
       },
       daily_schedule: {
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.TEXT,
       },
       image: {
-        type: Sequelize.DataTypes.STRING,
+        type: Sequelize.DataTypes.TEXT,
+      },
+      other: {
+        type: Sequelize.DataTypes.TEXT,
       },
       is_pet_food: {
         type: Sequelize.DataTypes.BOOLEAN,

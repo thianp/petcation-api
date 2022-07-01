@@ -12,7 +12,13 @@ module.exports = {
 
       u_id: {
         type: Sequelize.DataTypes.STRING,
+      },
+      email: {
+        type: Sequelize.DataTypes.STRING,
         unique: true,
+        validate: {
+          isEmail: true,
+        },
       },
       user_id: {
         type: Sequelize.DataTypes.INTEGER,
@@ -36,7 +42,7 @@ module.exports = {
       zip_code: {
         type: Sequelize.DataTypes.INTEGER,
       },
-      phon_number: {
+      phone_number: {
         type: Sequelize.DataTypes.INTEGER,
       },
       user_pic: {
