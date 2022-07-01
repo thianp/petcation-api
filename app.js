@@ -13,6 +13,7 @@ const houseRoute = require("./routes/houseRoute");
 const allHouseRoute = require("./routes/allHouseRoute");
 const bookingRoute = require("./routes/bookingRoute");
 const addressRoute = require("./routes/addressRoute");
+const filterdateRoute = require("./routes/filterdateRoute");
 
 const errorMiddleware = require("./middlewares/error");
 const notFoundMiddleware = require("./middlewares/notFound");
@@ -34,6 +35,7 @@ app.use("/pets", authenticate, petRoute);
 app.use("/allHouses", allHouseRoute);
 app.use("/houses", authenticate, houseRoute);
 app.use("/bookings", authenticate, bookingRoute);
+app.use("/filterdate", filterdateRoute);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

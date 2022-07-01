@@ -12,43 +12,28 @@ const {
   User,
   Host,
   Bookingcustomer,
+  Filterdate,
 } = require("../models");
 const createError = require("../utils/createError.js");
 
 exports.createBooking = async (req, res, next) => {
   try {
-    const result = await sequelize.transaction(async (t) => {
-      const { id } = req.user;
-      const {
-        token,
-        checkInDate,
-        checkOutDate,
-        houseId,
-        price,
-        includeFood,
-        serviceFee,
-        foodPrice,
-        petIds,
-      } = req.body;
-
-      // create charge (payment)
-      let createdCharge;
-      await omise.charges.create(
-        {
-          amount: +price * 100,
-          currency: "thb",
-          card: token,
-        },
-        function (err, charge) {
-          if (err) {
-            next(err);
-          }
-          createdCharge = charge;
-        }
-      );
-
+    const { id } = req.user;
+    const {
+      token,
+      checkInDate,
+      checkOutDate,
+      houseId,
+      price,
+      includeFood,
+      serviceFee,
+      foodPrice,
+      petIds,
+    } = req.body;
+    let booking;
+    await sequelize.transaction(async (t) => {
       // create booking
-      const booking = await Booking.create(
+      booking = await Booking.create(
         {
           checkInDate,
           checkOutDate,
@@ -57,8 +42,6 @@ exports.createBooking = async (req, res, next) => {
           foodPrice,
           serviceFee,
           includeFood,
-          status: createdCharge.status.toUpperCase(),
-          paymentId: createdCharge.id,
           userId: id,
         },
         { transaction: t }
@@ -86,7 +69,7 @@ exports.createBooking = async (req, res, next) => {
       const house = await House.findOne({
         where: { id: houseId },
         attributes: {
-          exclude: ["id", "createdAt", "updatedAt", "size", "other"],
+          exclude: ["id", "createdAt", "updatedAt"],
         },
       });
       if (!house) {
@@ -99,7 +82,7 @@ exports.createBooking = async (req, res, next) => {
       const host = await User.findOne({
         where: { id: house.userId },
         attributes: {
-          exclude: ["id", "createdAt", "updatedAt", "password", "email"],
+          exclude: ["id", "createdAt", "updatedAt", "password"],
         },
       });
       if (host) {
@@ -119,7 +102,7 @@ exports.createBooking = async (req, res, next) => {
       const customer = await User.findOne({
         where: { id },
         attributes: {
-          exclude: ["id", "createdAt", "updatedAt", "password", "email"],
+          exclude: ["id", "createdAt", "updatedAt", "password"],
         },
       });
       if (customer) {
@@ -146,8 +129,60 @@ exports.createBooking = async (req, res, next) => {
         { transaction: t }
       );
 
-      res.json({ booking });
+      // create filter date
+      function addDays(day) {
+        let date = new Date(day);
+        date.setDate(date.getDate() + 1);
+        return date;
+      }
+
+      let dateArr = [];
+      let curDate = new Date(checkInDate);
+      let stopDate = new Date(checkOutDate);
+      while (curDate <= stopDate) {
+        const date = curDate.toISOString();
+        dateArr.push(date.slice(0, 10));
+        curDate = addDays(curDate);
+      }
+
+      dateArr.map(async (el) => {
+        await Filterdate.create({
+          date: el,
+          houseId,
+          amount: petIds.length,
+          limit: house.limit,
+          bookingId: booking.id,
+        });
+      });
     });
+
+    // create charge (payment) and update booking
+    let createdCharge;
+    await omise.charges.create(
+      {
+        amount: +price * 100,
+        currency: "thb",
+        card: token,
+      },
+      function (err, charge) {
+        if (err) {
+          next(err);
+        }
+        createdCharge = charge;
+      }
+    );
+
+    await Booking.update(
+      {
+        status: createdCharge.status.toUpperCase(),
+        paymentId: createdCharge.id,
+      },
+      {
+        where: { id: booking.id },
+      }
+    );
+
+    res.json({ booking });
   } catch (err) {
     next(err);
   }
