@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     'Filterdate',
     {
       date: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
       },
       houseId: {
         type: DataTypes.INTEGER,
