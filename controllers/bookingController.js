@@ -17,20 +17,26 @@ const {
 const createError = require("../utils/createError.js");
 
 exports.createBooking = async (req, res, next) => {
+  let createdCharge;
+  const { id } = req.user;
+  const {
+    token,
+    checkInDate,
+    checkOutDate,
+    houseId,
+    price,
+    includeFood,
+    serviceFee,
+    foodPrice,
+    petIds,
+  } = req.body;
+
+  console.log(+(+price * 100).toFixed(2));
+  console.log(typeof +(+price * 100).toFixed(2));
+
   try {
-    const { id } = req.user;
-    const {
-      token,
-      checkInDate,
-      checkOutDate,
-      houseId,
-      price,
-      includeFood,
-      serviceFee,
-      foodPrice,
-      petIds,
-    } = req.body;
     let booking;
+    let house;
     await sequelize.transaction(async (t) => {
       // create booking
       booking = await Booking.create(
@@ -66,7 +72,7 @@ exports.createBooking = async (req, res, next) => {
       });
 
       // find house
-      const house = await House.findOne({
+      house = await House.findOne({
         where: { id: houseId },
         attributes: {
           exclude: ["id", "createdAt", "updatedAt"],
@@ -128,39 +134,12 @@ exports.createBooking = async (req, res, next) => {
         },
         { transaction: t }
       );
-
-      // create filter date
-      function addDays(day) {
-        let date = new Date(day);
-        date.setDate(date.getDate() + 1);
-        return date;
-      }
-
-      let dateArr = [];
-      let curDate = new Date(checkInDate);
-      let stopDate = new Date(checkOutDate);
-      while (curDate <= stopDate) {
-        const date = curDate.toISOString();
-        dateArr.push(date.slice(0, 10));
-        curDate = addDays(curDate);
-      }
-
-      dateArr.map(async (el) => {
-        await Filterdate.create({
-          date: el,
-          houseId,
-          amount: petIds.length,
-          limit: house.limit,
-          bookingId: booking.id,
-        });
-      });
     });
 
     // create charge (payment) and update booking
-    let createdCharge;
     await omise.charges.create(
       {
-        amount: +price * 100,
+        amount: (+price * 100).toFixed(2),
         currency: "thb",
         card: token,
       },
@@ -172,19 +151,69 @@ exports.createBooking = async (req, res, next) => {
       }
     );
 
-    await Booking.update(
-      {
-        status: createdCharge.status.toUpperCase(),
-        paymentId: createdCharge.id,
-      },
-      {
-        where: { id: booking.id },
-      }
-    );
+    // create filter dates
+    function addDays(day) {
+      let date = new Date(day);
+      date.setDate(date.getDate() + 1);
+      return date;
+    }
+
+    let dateArr = [];
+    let curDate = new Date(checkInDate);
+    let stopDate = new Date(checkOutDate);
+    while (curDate <= stopDate) {
+      const date = curDate.toISOString();
+      dateArr.push(date.slice(0, 10));
+      curDate = addDays(curDate);
+    }
+
+    dateArr.map(async (el) => {
+      await Filterdate.create({
+        date: el,
+        houseId,
+        amount: petIds.length,
+        limit: house.limit,
+        bookingId: booking.id,
+      });
+    });
+
+    // status handling
+    if (createdCharge.status === "successful" || createdCharge === "pending") {
+      await Booking.update(
+        {
+          status: createdCharge.status.toUpperCase(),
+          paymentId: createdCharge.id,
+        },
+        {
+          where: { id: booking.id },
+        }
+      );
+    } else {
+      createError("omise error: " + createdCharge.status);
+    }
 
     res.json({ booking });
   } catch (err) {
-    next(err);
+    if (createdCharge) {
+      omise.charges.createRefund(
+        createdCharge.id,
+        { amount: +(+price * 100).toFixed(2) },
+        function (error, refund) {
+          if (error) {
+            console.log("internal error: ", err);
+            console.log("omise refund error: ", error);
+            next(error);
+          } else {
+            console.log("omise refund success: ", refund);
+            next(
+              new Error(
+                "There was an issue. The amount charged will be refunded to you."
+              )
+            );
+          }
+        }
+      );
+    }
   }
 };
 
