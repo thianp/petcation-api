@@ -10,7 +10,7 @@ module.exports = {
         primaryKey: true,
       },
       date: {
-        type: Sequelize.DataTypes.DATE,
+        type: Sequelize.DataTypes.DATEONLY,
       },
       house_id: {
         type: Sequelize.DataTypes.INTEGER,
