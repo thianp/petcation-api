@@ -5,7 +5,6 @@ const omise = require("omise")({
 const {
   Booking,
   House,
-  sequelize,
   Pet,
   Bookingpet,
   Bookinghouse,
@@ -37,22 +36,18 @@ exports.createBooking = async (req, res, next) => {
   try {
     let booking;
     let house;
-    // await sequelize.transaction(async (t) => {
 
     // create booking
-    booking = await Booking.create(
-      {
-        checkInDate,
-        checkOutDate,
-        houseId,
-        price,
-        foodPrice,
-        serviceFee,
-        includeFood,
-        userId: id,
-      }
-      // { transaction: t }
-    );
+    booking = await Booking.create({
+      checkInDate,
+      checkOutDate,
+      houseId,
+      price,
+      foodPrice,
+      serviceFee,
+      includeFood,
+      userId: id,
+    });
 
     // create bookingpets
     petIds.map(async (petId) => {
@@ -63,10 +58,7 @@ exports.createBooking = async (req, res, next) => {
         },
       });
       if (pet) {
-        await Bookingpet.create(
-          { ...pet.dataValues, bookingId: booking.id }
-          // { transaction: t }
-        );
+        await Bookingpet.create({ ...pet.dataValues, bookingId: booking.id });
       } else {
         createError("Pet not found");
       }
@@ -94,14 +86,11 @@ exports.createBooking = async (req, res, next) => {
     });
 
     if (host) {
-      createdHost = await Host.create(
-        {
-          ...host.dataValues,
-          bookingId: booking.id,
-          userId: house.userId,
-        }
-        // { transaction: t }
-      );
+      createdHost = await Host.create({
+        ...host.dataValues,
+        bookingId: booking.id,
+        userId: house.userId,
+      });
     } else {
       createError("Host user not found");
     }
@@ -114,29 +103,22 @@ exports.createBooking = async (req, res, next) => {
       },
     });
     if (customer) {
-      await Bookingcustomer.create(
-        {
-          ...customer.dataValues,
-          bookingId: booking.id,
-          userId: id,
-        }
-        // { transaction: t }
-      );
+      await Bookingcustomer.create({
+        ...customer.dataValues,
+        bookingId: booking.id,
+        userId: id,
+      });
     } else {
       createError("Customer user not found");
     }
 
     // create booking house
-    await Bookinghouse.create(
-      {
-        ...house.dataValues,
-        houseId,
-        bookingId: booking.id,
-        hostId: createdHost.id,
-      }
-      // { transaction: t }
-    );
-    // });
+    await Bookinghouse.create({
+      ...house.dataValues,
+      houseId,
+      bookingId: booking.id,
+      hostId: createdHost.id,
+    });
 
     // create charge (payment) and update booking
     await omise.charges.create(
