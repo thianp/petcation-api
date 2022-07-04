@@ -91,19 +91,18 @@ exports.createBooking = async (req, res, next) => {
           exclude: ["id", "createdAt", "updatedAt", "password"],
         },
       });
-      console.log("host", host);
-      // if (host) {
-      //   createdHost = await Host.create(
-      //     {
-      //       ...host.dataValues,
-      //       bookingId: booking.id,
-      //       userId: house.userId,
-      //     },
-      //     { transaction: t }
-      //   );
-      // } else {
-      //   createError("Host user not found");
-      // }
+      if (host) {
+        createdHost = await Host.create(
+          {
+            ...host,
+            bookingId: booking.id,
+            userId: house.userId,
+          },
+          { transaction: t }
+        );
+      } else {
+        createError("Host user not found");
+      }
 
       // create customer
       const customer = await User.findOne({
@@ -132,7 +131,7 @@ exports.createBooking = async (req, res, next) => {
           houseId,
           bookingId: booking.id,
           // hostId: createdHost.id,
-          hostId: 8,
+          hostId: 1,
         },
         { transaction: t }
       );
