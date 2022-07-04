@@ -211,6 +211,8 @@ exports.createBooking = async (req, res, next) => {
           }
         }
       );
+    } else {
+      next(err);
     }
   }
 };
