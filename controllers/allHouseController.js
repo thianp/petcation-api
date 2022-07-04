@@ -1,13 +1,13 @@
-const { QueryTypes } = require('sequelize');
-const { Op } = require('sequelize');
-const { House, User, sequelize } = require('../models');
-const createError = require('../utils/createError');
+const { QueryTypes } = require("sequelize");
+const { Op } = require("sequelize");
+const { House, User, sequelize } = require("../models");
+const createError = require("../utils/createError");
 
 exports.getHouse = async (req, res, next) => {
   try {
-    const houses = await House.findAll({ where: { status: 'OPEN' } });
+    const houses = await House.findAll({ where: { status: "OPEN" } });
     if (!houses) {
-      createError('House not found', 400);
+      createError("House not found", 400);
     }
 
     res.status(200).json(houses);
@@ -22,12 +22,12 @@ exports.getHouseById = async (req, res, next) => {
     const house = await House.findOne({
       where: { id },
       include: [
-        { model: User, attributes: { exclude: ['uId', 'email', 'password'] } },
+        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
       ],
     });
     console.log(id);
     if (!house) {
-      createError('House not found', 400);
+      createError("House not found", 400);
     }
 
     res.status(200).json(house);
@@ -38,8 +38,13 @@ exports.getHouseById = async (req, res, next) => {
 
 exports.getHouseFilter = async (req, res, next) => {
   try {
-    const { checkInDate, checkOutDate, amountPet, province, petType } =
-      req.query;
+    const {
+      checkInDate,
+      checkOutDate,
+      amountPet = 1,
+      province,
+      petType,
+    } = req.query;
 
     const filter = await sequelize.query(
       'SELECT `limit`,SUM(amount) `totalPet`, house_id `houseId` , `date` FROM filterdates WHERE `date` BETWEEN "' +
@@ -47,35 +52,37 @@ exports.getHouseFilter = async (req, res, next) => {
         '" AND "' +
         checkOutDate +
         '"' +
-        'GROUP BY `date`,house_id',
+        "GROUP BY `date`,house_id,`limit` ",
       {
         type: QueryTypes.SELECT,
       }
     );
 
-    let activeHouse = filter.reduce((acc, el) => {
-      if (!amountPet) {
-        if (el.limit - el.totalPet === 0) {
-          acc.push(el.houseId);
-        }
-      } else {
-        if (el.limit - el.totalPet === +amountPet) {
-          acc.push(el.houseId);
-        }
-      }
+    // let activeHouse = filter.reduce((acc, el) => {
+    //   if (!amountPet) {
+    //     if (el.limit - el.totalPet === 0) {
+    //       acc.push(el.houseId);
+    //     }
+    //   } else {
+    //     if (el.limit - el.totalPet < +amountPet) {
+    //       acc.push(el.houseId);
+    //     }
+    //   }
 
+    let activeHouse = filter.reduce((acc, el) => {
+      if (el.limit - el.totalPet < +amountPet) {
+        acc.push(el.houseId);
+      }
       return acc;
     }, []);
 
+    // console.log(activeHouse);
+
     const payload = {};
 
-    if (!amountPet) {
-      payload.id = {
-        [Op.not]: activeHouse,
-      };
-    } else {
-      payload.id = activeHouse;
-    }
+    payload.id = {
+      [Op.not]: activeHouse,
+    };
 
     if (petType) {
       payload.petType = petType;
@@ -84,7 +91,7 @@ exports.getHouseFilter = async (req, res, next) => {
     if (province) {
       const userId = await User.findAll({
         where: { province },
-        attributes: ['id'],
+        attributes: ["id"],
       });
 
       const setUserId = userId.reduce((acc, el) => {
