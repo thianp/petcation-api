@@ -220,7 +220,13 @@ exports.createBooking = async (req, res, next) => {
 exports.getSingleBooking = async (req, res, next) => {
   try {
     const { bookingId } = req.params;
-    const booking = await Booking.findOne({ where: { id: bookingId } });
+    const booking = await Booking.findOne({
+      where: { id: bookingId },
+      include: [
+        { model: House },
+        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
+      ],
+    });
     res.json({ booking });
   } catch (err) {
     next(err);
@@ -230,7 +236,13 @@ exports.getSingleBooking = async (req, res, next) => {
 exports.getGuestBookings = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const bookings = await Booking.findAll({ where: { userId: id } });
+    const bookings = await Booking.findAll({
+      where: { userId: id },
+      include: [
+        { model: House },
+        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
+      ],
+    });
     res.json({ bookings });
   } catch (err) {
     next(err);
@@ -246,6 +258,10 @@ exports.getHostBookings = async (req, res, next) => {
     }
     const bookings = await Booking.findAll({
       where: { houseId: hostHouse.id },
+      include: [
+        { model: House },
+        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
+      ],
     });
     res.json({ bookings });
   } catch (err) {
