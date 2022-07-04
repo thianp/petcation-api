@@ -70,7 +70,7 @@ exports.getHouseFilter = async (req, res, next) => {
     //   }
 
     let activeHouse = filter.reduce((acc, el) => {
-      if (el.limit - el.totalPet < +amountPet) {
+      if (el.limit - el.totalPet > +amountPet) {
         acc.push(el.houseId);
       }
       return acc;
