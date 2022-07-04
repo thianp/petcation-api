@@ -110,12 +110,12 @@ exports.createBooking = async (req, res, next) => {
     }
 
     // create booking house
-    await Bookinghouse.create({
-      ...house,
-      houseId,
-      bookingId: booking.id,
-      hostId: createdHost.id,
-    });
+    // await Bookinghouse.create({
+    //   ...house,
+    //   houseId,
+    //   bookingId: booking.id,
+    //   hostId: createdHost.id,
+    // });
 
     // create charge (payment) and update booking
     await omise.charges.create(
