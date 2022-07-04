@@ -8,11 +8,10 @@ const genToken = (payload) =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
-
 exports.register = async (req, res, next) => {
   try {
-    const { uId,email, password, confirmPassword } = req.body;
-console.log(email)
+    const { uId, email, password, confirmPassword } = req.body;
+    console.log(email);
     if (!uId) {
       createError("uId is required", 400);
     }
