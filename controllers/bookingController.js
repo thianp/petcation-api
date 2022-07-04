@@ -5,7 +5,6 @@ const omise = require("omise")({
 const {
   Booking,
   House,
-  sequelize,
   Pet,
   Bookingpet,
   Bookinghouse,
@@ -37,105 +36,88 @@ exports.createBooking = async (req, res, next) => {
   try {
     let booking;
     let house;
-    await sequelize.transaction(async (t) => {
-      // create booking
-      booking = await Booking.create(
-        {
-          checkInDate,
-          checkOutDate,
-          houseId,
-          price,
-          foodPrice,
-          serviceFee,
-          includeFood,
-          userId: id,
-        },
-        { transaction: t }
-      );
 
-      // create bookingpets
-      petIds.map(async (petId) => {
-        const pet = await Pet.findOne({
-          where: { id: petId },
-          attributes: {
-            exclude: ["id", "createdAt", "updatedAt"],
-          },
-        });
-        if (pet) {
-          await Bookingpet.create(
-            { ...pet.dataValues, bookingId: booking.id },
-            { transaction: t }
-          );
-        } else {
-          createError("Pet not found");
-        }
-      });
+    // create booking
+    booking = await Booking.create({
+      checkInDate,
+      checkOutDate,
+      houseId,
+      price,
+      foodPrice,
+      serviceFee,
+      includeFood,
+      userId: id,
+    });
 
-      // find house
-      house = await House.findOne({
-        where: { id: houseId },
+    // create bookingpets
+    petIds.map(async (petId) => {
+      const pet = await Pet.findOne({
+        where: { id: petId },
         attributes: {
           exclude: ["id", "createdAt", "updatedAt"],
         },
       });
-      if (!house) {
-        createError("House not found");
-      }
-
-      // variable for receiving createdHost's id
-      let createdHost;
-      // create host
-      const host = await User.findOne({
-        where: { id: house.userId },
-        attributes: {
-          exclude: ["id", "createdAt", "updatedAt", "password"],
-        },
-      });
-      console.log("host", host);
-      // if (host) {
-      //   createdHost = await Host.create(
-      //     {
-      //       ...host.dataValues,
-      //       bookingId: booking.id,
-      //       userId: house.userId,
-      //     },
-      //     { transaction: t }
-      //   );
-      // } else {
-      //   createError("Host user not found");
-      // }
-
-      // create customer
-      const customer = await User.findOne({
-        where: { id },
-        attributes: {
-          exclude: ["id", "createdAt", "updatedAt", "password"],
-        },
-      });
-      if (customer) {
-        await Bookingcustomer.create(
-          {
-            ...customer.dataValues,
-            bookingId: booking.id,
-            userId: id,
-          },
-          { transaction: t }
-        );
+      if (pet) {
+        await Bookingpet.create({ ...pet.dataValues, bookingId: booking.id });
       } else {
-        createError("Customer user not found");
+        createError("Pet not found");
       }
+    });
 
-      // create booking house
-      await Bookinghouse.create(
-        {
-          ...house.dataValues,
-          houseId,
-          bookingId: booking.id,
-          // hostId: createdHost.id,
-          hostId: 8,
-        },
-        { transaction: t }
-      );
+    // find house
+    house = await House.findOne({
+      where: { id: houseId },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt"],
+      },
+    });
+    if (!house) {
+      createError("House not found");
+    }
+
+    // variable for receiving createdHost's id
+    let createdHost;
+    // create host
+    const host = await User.findOne({
+      where: { id: house.userId },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "password"],
+      },
+    });
+
+    if (host) {
+      createdHost = await Host.create({
+        ...host.dataValues,
+        bookingId: booking.id,
+        userId: house.userId,
+      });
+    } else {
+      createError("Host user not found");
+    }
+
+    // create customer
+    const customer = await User.findOne({
+      where: { id },
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "password"],
+      },
+    });
+    if (customer) {
+      await Bookingcustomer.create({
+        ...customer.dataValues,
+        bookingId: booking.id,
+        userId: id,
+      });
+    } else {
+      createError("Customer user not found");
+    }
+
+    // create booking house
+    await Bookinghouse.create({
+      ...house.dataValues,
+      houseId,
+      bookingId: booking.id,
+      hostId: createdHost.id,
     });
 
     // create charge (payment) and update booking
