@@ -92,18 +92,18 @@ exports.createBooking = async (req, res, next) => {
         },
       });
       console.log("host", host);
-      if (host) {
-        createdHost = await Host.create(
-          {
-            ...host.dataValues,
-            bookingId: booking.id,
-            userId: house.userId,
-          },
-          { transaction: t }
-        );
-      } else {
-        createError("Host user not found");
-      }
+      // if (host) {
+      //   createdHost = await Host.create(
+      //     {
+      //       ...host.dataValues,
+      //       bookingId: booking.id,
+      //       userId: house.userId,
+      //     },
+      //     { transaction: t }
+      //   );
+      // } else {
+      //   createError("Host user not found");
+      // }
 
       // create customer
       const customer = await User.findOne({
@@ -131,7 +131,8 @@ exports.createBooking = async (req, res, next) => {
           ...house.dataValues,
           houseId,
           bookingId: booking.id,
-          hostId: createdHost.id,
+          // hostId: createdHost.id,
+          hostId: 8,
         },
         { transaction: t }
       );
