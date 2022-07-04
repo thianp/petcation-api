@@ -39,7 +39,7 @@ exports.getHouseById = async (req, res, next) => {
 exports.getHouseFilter = async (req, res, next) => {
   try {
     const { checkInDate, checkOutDate, amountPet, province, petType } =
-      req.body;
+      req.query;
 
     const filter = await sequelize.query(
       'SELECT `limit`,SUM(amount) `totalPet`, house_id `houseId` , `date` FROM filterdates WHERE `date` BETWEEN "' +
