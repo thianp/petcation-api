@@ -6,11 +6,11 @@ const {
   CAGE,
   OPEN,
   CLOSE,
-} = require('../config/constants');
+} = require("../config/constants");
 
 module.exports = (sequelize, DataTypes) => {
   const House = sequelize.define(
-    'House',
+    "House",
     {
       name: {
         type: DataTypes.STRING,
@@ -85,7 +85,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       status: {
         type: DataTypes.ENUM(OPEN, CLOSE),
-        defaultValue: CLOSE,
+        defaultValue: OPEN,
       },
     },
     {
@@ -96,11 +96,11 @@ module.exports = (sequelize, DataTypes) => {
   House.associate = (models) => {
     House.belongsTo(models.User, {
       foreignKey: {
-        name: 'userId',
+        name: "userId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
   };
 
