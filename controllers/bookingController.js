@@ -5,7 +5,7 @@ const omise = require("omise")({
 const {
   Booking,
   House,
-  sequelize,
+  // sequelize,
   Pet,
   Bookingpet,
   Bookinghouse,
@@ -30,9 +30,6 @@ exports.createBooking = async (req, res, next) => {
     foodPrice,
     petIds,
   } = req.body;
-
-  console.log(+(+price * 100).toFixed(2));
-  console.log(typeof +(+price * 100).toFixed(2));
 
   try {
     let booking;
