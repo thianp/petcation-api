@@ -59,7 +59,8 @@ exports.getPetById = async (req, res, next) => {
 };
 exports.getAllPet = async (req, res, next) => {
   try {
-    const pet = await Pet.findAll();
+    const { id } = req.user;
+    const pet = await Pet.findAll({ where: { userId: id } });
 
     res.status(200).json({ pet });
   } catch (err) {
