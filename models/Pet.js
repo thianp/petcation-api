@@ -1,8 +1,8 @@
-const { DOG, CAT } = require('../config/constants');
+const { DOG, CAT } = require("../config/constants");
 
 module.exports = (sequelize, DataTypes) => {
   const Pet = sequelize.define(
-    'Pet',
+    "Pet",
     {
       name: {
         type: DataTypes.STRING,
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       weight: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       age: {
         type: DataTypes.INTEGER,
@@ -34,11 +34,11 @@ module.exports = (sequelize, DataTypes) => {
   Pet.associate = (models) => {
     Pet.belongsTo(models.User, {
       foreignKey: {
-        name: 'userId',
+        name: "userId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
   };
 
