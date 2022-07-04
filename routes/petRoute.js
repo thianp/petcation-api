@@ -4,8 +4,8 @@ const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
-router.get("/:id", petController.getPetById);
 router.get("/", petController.getAllPet);
+router.get("/:id", petController.getPetById);
 router.post("/", upload.single("petPic"), petController.createPet);
 router.patch(
   "/update/:petId",
