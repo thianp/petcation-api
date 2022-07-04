@@ -91,6 +91,7 @@ exports.createBooking = async (req, res, next) => {
           exclude: ["id", "createdAt", "updatedAt", "password"],
         },
       });
+      console.log("host", host);
       if (host) {
         createdHost = await Host.create(
           {
