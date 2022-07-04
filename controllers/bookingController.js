@@ -50,7 +50,7 @@ exports.createBooking = async (req, res, next) => {
         includeFood,
         userId: id,
       },
-      { transaction: t }
+      // { transaction: t }
     );
 
     // create bookingpets
@@ -64,7 +64,7 @@ exports.createBooking = async (req, res, next) => {
       if (pet) {
         await Bookingpet.create(
           { ...pet.dataValues, bookingId: booking.id },
-          { transaction: t }
+          // { transaction: t }
         );
       } else {
         createError("Pet not found");
@@ -98,7 +98,7 @@ exports.createBooking = async (req, res, next) => {
           bookingId: booking.id,
           userId: house.userId,
         },
-        { transaction: t }
+        // { transaction: t }
       );
     } else {
       createError("Host user not found");
@@ -118,7 +118,7 @@ exports.createBooking = async (req, res, next) => {
           bookingId: booking.id,
           userId: id,
         },
-        { transaction: t }
+        // { transaction: t }
       );
     } else {
       createError("Customer user not found");
@@ -133,7 +133,7 @@ exports.createBooking = async (req, res, next) => {
         // hostId: createdHost.id,
         hostId: 1,
       },
-      { transaction: t }
+      // { transaction: t }
     );
     // });
 
