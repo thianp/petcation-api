@@ -32,9 +32,6 @@ exports.getBookingAmount = async (req, res, next) => {
       })
     );
 
-    // find house limit
-    const { limit } = await House.findOne({ where: { id: houseId } });
-
     // find total amount for each day
     let totalAmounts = [];
     dateArr.map((el) => {
@@ -49,7 +46,7 @@ exports.getBookingAmount = async (req, res, next) => {
 
     // get biggest amount
     const max = Math.max(...totalAmounts);
-    console.log(max);
+    console.log("max", max);
 
     res.status(200).json({ max });
   } catch (err) {
