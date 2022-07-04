@@ -30,9 +30,6 @@ exports.createBooking = async (req, res, next) => {
     petIds,
   } = req.body;
 
-  console.log(+(+price * 100).toFixed(2));
-  console.log(typeof +(+price * 100).toFixed(2));
-
   try {
     let booking;
     let house;
@@ -113,12 +110,12 @@ exports.createBooking = async (req, res, next) => {
     }
 
     // create booking house
-    await Bookinghouse.create({
-      ...house.dataValues,
-      houseId,
-      bookingId: booking.id,
-      hostId: createdHost.id,
-    });
+    // await Bookinghouse.create({
+    //   ...house,
+    //   houseId,
+    //   bookingId: booking.id,
+    //   hostId: createdHost.id,
+    // });
 
     // create charge (payment) and update booking
     await omise.charges.create(
