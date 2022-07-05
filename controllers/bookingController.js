@@ -250,16 +250,20 @@ exports.getGuestBookings = async (req, res, next) => {
 
 exports.getHostBookings = async (req, res, next) => {
   try {
-    const { id } = req.user;
-    const hostHouse = await House.findOne({ where: { userId: id } });
+    // const { id } = req.user;
+    const { id } = req.params;
+    const hostHouse = await House.findOne({ where: { id } });
     if (!hostHouse) {
       createError("host's house is not found");
     }
     const bookings = await Booking.findAll({
       where: { houseId: hostHouse.id },
       include: [
-        { model: House },
-        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
+        { model: Bookinghouse },
+        {
+          model: Bookingcustomer,
+          attributes: { exclude: ["uId", "email", "password"] },
+        },
       ],
     });
     res.json({ bookings });

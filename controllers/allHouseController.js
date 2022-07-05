@@ -1,6 +1,6 @@
-const { QueryTypes } = require("sequelize");
+const { QueryTypes, where } = require("sequelize");
 const { Op } = require("sequelize");
-const { House, User, sequelize } = require("../models");
+const { House, User, sequelize, Filterdate } = require("../models");
 const createError = require("../utils/createError");
 
 exports.getHouse = async (req, res, next) => {
@@ -38,72 +38,88 @@ exports.getHouseById = async (req, res, next) => {
 
 exports.getHouseFilter = async (req, res, next) => {
   try {
+    const d = new Date();
+    const dOut = new Date();
     const {
       checkInDate,
       checkOutDate,
       amountPet = 1,
       province,
-      petType,
+      petType = ["CAT", "DOG"],
     } = req.query;
 
-    const filter = await sequelize.query(
-      'SELECT `limit`,SUM(amount) `totalPet`, house_id `houseId` , `date` FROM filterdates WHERE `date` BETWEEN "' +
-        checkInDate +
-        '" AND "' +
-        checkOutDate +
-        '"' +
-        "GROUP BY `date`,house_id,`limit` ",
-      {
-        type: QueryTypes.SELECT,
-      }
-    );
+    let deactiveHouse = [];
 
-    // let activeHouse = filter.reduce((acc, el) => {
-    //   if (!amountPet) {
-    //     if (el.limit - el.totalPet === 0) {
-    //       acc.push(el.houseId);
-    //     }
-    //   } else {
-    //     if (el.limit - el.totalPet < +amountPet) {
-    //       acc.push(el.houseId);
-    //     }
-    //   }
-
-    let activeHouse = filter.reduce((acc, el) => {
-      if (el.limit - el.totalPet > +amountPet) {
-        acc.push(el.houseId);
-      }
-      return acc;
-    }, []);
-
-    // console.log(activeHouse);
-
-    const payload = {};
-
-    payload.id = {
-      [Op.not]: activeHouse,
-    };
-
-    if (petType) {
-      payload.petType = petType;
+    if (checkInDate || checkOutDate) {
+      deactiveHouse = await Filterdate.findAll({
+        where: {
+          date: {
+            [Op.between]: [checkInDate, checkOutDate],
+          },
+        },
+      });
+    } else {
+      deactiveHouse = await Filterdate.findAll({
+        where: {
+          date: {
+            [Op.between]: [
+              d.toISOString(),
+              new Date(dOut.setMonth(d.getMonth() + 4)).toISOString(),
+            ],
+          },
+        },
+      });
     }
 
+    const getTotal = deactiveHouse.reduce((a, c) => {
+      if (!a[c.houseId]) {
+        a[c.houseId] = c.limit - c.amount;
+      } else {
+        a[c.houseId] -= c.amount;
+      }
+      return a;
+    }, {});
+    console.log(getTotal);
+
+    let fullHouse = [];
+    for (let k in getTotal) {
+      if (getTotal[k] < +amountPet) {
+        fullHouse.push(k * 1);
+      }
+    }
+
+    console.log(fullHouse);
+
+    let userId;
     if (province) {
-      const userId = await User.findAll({
+      const user = await User.findAll({
         where: { province },
         attributes: ["id"],
       });
 
-      const setUserId = userId.reduce((acc, el) => {
-        acc.push(el.id);
-        return acc;
-      }, []);
-      payload.userId = setUserId;
+      const sum = JSON.parse(JSON.stringify(user));
+      console.log(JSON.stringify(user));
+      userId = sum.map((el) => el.id);
     }
+    console.log(userId);
 
     const houses = await House.findAll({
-      where: payload,
+      where: {
+        id: {
+          [Op.notIn]: [fullHouse],
+        },
+        petType: {
+          [Op.or]: [petType],
+        },
+        limit: {
+          [Op.gte]: amountPet,
+        },
+        userId: {
+          [Op.in]: userId,
+        },
+      },
     });
+
     res.status(200).json(houses);
   } catch (err) {
     next(err);

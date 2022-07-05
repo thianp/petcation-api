@@ -1,6 +1,12 @@
-const { Province, District, SubDistrict, House } = require('../models');
-const cloudinary = require('../utils/cloudinary');
-const fs = require('fs');
+const {
+  Province,
+  District,
+  SubDistrict,
+  House,
+  Filterdate,
+} = require("../models");
+const cloudinary = require("../utils/cloudinary");
+const fs = require("fs");
 
 exports.getHouseByUserId = async (req, res, next) => {
   try {
@@ -9,10 +15,25 @@ exports.getHouseByUserId = async (req, res, next) => {
     const myHouse = await House.findOne({ where: { userId: id } });
 
     if (!myHouse) {
-      createError('My House not found', 400);
+      createError("My House not found", 400);
     }
 
     res.status(200).json(myHouse);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.getHouseLimit = async (req, res, next) => {
+  try {
+    const d = new Date();
+
+    const { id } = req.params;
+    const limit = await Filterdate.findAll({
+      where: { houseId: id, date: d.toISOString() },
+    });
+
+    res.status(200).json(limit);
   } catch (err) {
     next(err);
   }
@@ -172,7 +193,7 @@ exports.updateHouse = async (req, res, next) => {
     console.log(findHouseId);
 
     if (!findHouseId) {
-      createError(404, 'House not found');
+      createError(404, "House not found");
     }
 
     const updateValue = await House.update(
