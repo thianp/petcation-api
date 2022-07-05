@@ -40,17 +40,22 @@ exports.getHouseFilter = async (req, res, next) => {
   try {
     const d = new Date();
     const dOut = new Date();
-    const {
-      checkInDate,
-      checkOutDate,
-      amountPet = 1,
-      province,
-      petType = ["CAT", "DOG"],
-    } = req.query;
+    let { checkInDate, checkOutDate, amountPet, province, petType } = req.query;
+
+    if (amountPet === "" || !amountPet) {
+      checkOutDate = 1;
+    }
+    if (petType === "" || !petType) {
+      petType = ["CAT", "DOG"];
+    }
 
     let deactiveHouse = [];
 
-    if (checkInDate || checkOutDate) {
+    console.log("checkInDate", checkInDate);
+    console.log("checkOutDate", checkOutDate);
+    console.log("province", province);
+
+    if (checkInDate !== "" || checkOutDate !== "") {
       deactiveHouse = await Filterdate.findAll({
         where: {
           date: {
@@ -91,7 +96,7 @@ exports.getHouseFilter = async (req, res, next) => {
     console.log(fullHouse);
 
     let userId;
-    if (province) {
+    if (province !== "") {
       const user = await User.findAll({
         where: { province },
         attributes: ["id"],
