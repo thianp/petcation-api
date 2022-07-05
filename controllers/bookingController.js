@@ -222,10 +222,7 @@ exports.getSingleBooking = async (req, res, next) => {
     const { bookingId } = req.params;
     const booking = await Booking.findOne({
       where: { id: bookingId },
-      include: [
-        { model: House },
-        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
-      ],
+      include: [{ model: House }, { model: Bookingpet }],
     });
     res.json({ booking });
   } catch (err) {
