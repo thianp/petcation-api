@@ -252,10 +252,7 @@ exports.getHostBookings = async (req, res, next) => {
     }
     const bookings = await Booking.findAll({
       where: { houseId: hostHouse.id },
-      include: [
-        { model: House },
-        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
-      ],
+      include: [{ model: House }, { model: Bookingpet }],
     });
     res.json({ bookings });
   } catch (err) {
