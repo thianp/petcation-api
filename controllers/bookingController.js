@@ -50,11 +50,8 @@ exports.createBooking = async (req, res, next) => {
         { transaction: t }
       );
 
-      console.log("petIds", petIds);
-
       // create bookingpets
       petIds.map(async (petId, idx) => {
-        console.log(idx, petIds);
         const pet = await Pet.findOne({
           where: { id: petId },
           attributes: {
