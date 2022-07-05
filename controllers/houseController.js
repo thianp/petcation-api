@@ -7,6 +7,7 @@ const {
 } = require("../models");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
+const createError = require("../utils/createError");
 
 exports.getHouseByUserId = async (req, res, next) => {
   try {
