@@ -240,7 +240,6 @@ exports.getGuestBookings = async (req, res, next) => {
       where: { userId: id },
       include: [
         { model: House },
-        { model: User, attributes: { exclude: ["uId", "email", "password"] } },
       ],
     });
     res.json({ bookings });
