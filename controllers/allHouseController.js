@@ -96,7 +96,7 @@ exports.getHouseFilter = async (req, res, next) => {
     console.log(fullHouse);
 
     let userId;
-    if (province !== "") {
+    if (province !== undefined && province !== "") {
       const user = await User.findAll({
         where: { province },
         attributes: ["id"],
@@ -108,24 +108,40 @@ exports.getHouseFilter = async (req, res, next) => {
     }
     console.log(userId);
 
-    const houses = await House.findAll({
-      where: {
-        id: {
-          [Op.notIn]: [fullHouse],
+    if (province !== undefined && province !== "") {
+      const houses = await House.findAll({
+        where: {
+          id: {
+            [Op.notIn]: [fullHouse],
+          },
+          petType: {
+            [Op.or]: [petType],
+          },
+          limit: {
+            [Op.gte]: amountPet,
+          },
+          userId: {
+            [Op.in]: userId,
+          },
         },
-        petType: {
-          [Op.or]: [petType],
+      });
+      res.status(200).json(houses);
+    } else {
+      const houses = await House.findAll({
+        where: {
+          id: {
+            [Op.notIn]: [fullHouse],
+          },
+          petType: {
+            [Op.or]: [petType],
+          },
+          limit: {
+            [Op.gte]: amountPet,
+          },
         },
-        limit: {
-          [Op.gte]: amountPet,
-        },
-        userId: {
-          [Op.in]: userId,
-        },
-      },
-    });
-
-    res.status(200).json(houses);
+      });
+      res.status(200).json(houses);
+    }
   } catch (err) {
     next(err);
   }
