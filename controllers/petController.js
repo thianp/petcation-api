@@ -60,7 +60,10 @@ exports.getPetById = async (req, res, next) => {
 exports.getAllPet = async (req, res, next) => {
   try {
     const { id } = req.user;
-    const pet = await Pet.findAll({ where: { userId: id } });
+    const pet = await Pet.findAll({
+      where: { userId: id },
+      order: [["id", "desc"]],
+    });
 
     res.status(200).json({ pet });
   } catch (err) {
