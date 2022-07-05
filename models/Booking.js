@@ -1,8 +1,8 @@
-const { SUCCESSFUL, PENDING, CANCLE } = require('../config/constants');
+const { SUCCESSFUL, PENDING, CANCLE } = require("../config/constants");
 
 module.exports = (sequelize, DataTypes) => {
   const Booking = sequelize.define(
-    'Booking',
+    "Booking",
     {
       checkInDate: {
         type: DataTypes.DATEONLY,
@@ -46,27 +46,35 @@ module.exports = (sequelize, DataTypes) => {
   Booking.associate = (models) => {
     Booking.hasMany(models.Bookingpet, {
       foreignKey: {
-        name: 'bookingId',
+        name: "bookingId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
     Booking.hasOne(models.Bookingcustomer, {
       foreignKey: {
-        name: 'bookingId',
+        name: "bookingId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
     Booking.hasOne(models.Bookinghouse, {
       foreignKey: {
-        name: 'bookingId',
+        name: "bookingId",
         allowNull: false,
       },
-      onUpdate: 'RESTRICT',
-      onDelete: 'RESTRICT',
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
+    });
+    Booking.belongsTo(models.House, {
+      foreignKey: {
+        name: "houseId",
+        allowNull: false,
+      },
+      onUpdate: "RESTRICT",
+      onDelete: "RESTRICT",
     });
   };
 
