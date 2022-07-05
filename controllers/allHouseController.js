@@ -43,7 +43,7 @@ exports.getHouseFilter = async (req, res, next) => {
       checkOutDate,
       amountPet = 1,
       province,
-      petType,
+      petType = ["CAT", "DOG"],
     } = req.query;
 
     // const filter = await sequelize.query(
@@ -85,7 +85,6 @@ exports.getHouseFilter = async (req, res, next) => {
         },
       });
     }
-    console.log(deactiveHouse);
 
     const getTotal = deactiveHouse.reduce((a, c) => {
       if (!a[c.houseId]) {
@@ -95,24 +94,19 @@ exports.getHouseFilter = async (req, res, next) => {
       }
       return a;
     }, {});
-    console.log(getTotal);
 
     let fullHouse = [];
     for (let k in getTotal) {
-      if (getTotal[k] === 0) {
+      if (getTotal[k] === 0 || getTotal[k] < amountPet) {
         fullHouse.push(k * 1);
       }
     }
 
-    const payload = {};
+    // const payload = {};
 
     // payload.id = {
     //   [Op.not]: fullHouse,
     // };
-
-    if (petType) {
-      payload.petType = petType;
-    }
 
     // const housrId =
     // if (province) {
@@ -139,7 +133,13 @@ exports.getHouseFilter = async (req, res, next) => {
         id: {
           [Op.notIn]: [fullHouse],
         },
-        petType,
+
+        petType: {
+          [Op.or]: [petType],
+        },
+        limit: {
+          [Op.gt]: amountPet,
+        },
       },
     });
 
