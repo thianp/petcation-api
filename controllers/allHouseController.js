@@ -1,6 +1,6 @@
 const { QueryTypes } = require("sequelize");
 const { Op } = require("sequelize");
-const { House, User, sequelize } = require("../models");
+const { House, User, sequelize, Filterdate } = require("../models");
 const createError = require("../utils/createError");
 
 exports.getHouse = async (req, res, next) => {
@@ -46,13 +46,16 @@ exports.getHouseFilter = async (req, res, next) => {
       petType,
     } = req.query;
 
+    console.log(amountPet);
+
     const filter = await sequelize.query(
-      'SELECT `limit`,SUM(amount) `totalPet`, house_id `houseId` , `date` FROM filterdates WHERE `date` BETWEEN "' +
+      // "SELECT * FROM filterdates",
+
+      "SELECT `limit`,SUM(amount) `totalPet`, house_id `houseId` , `date` FROM filterdates WHERE `date` BETWEEN " +
         checkInDate +
-        '" AND "' +
+        " AND " +
         checkOutDate +
-        '"' +
-        "GROUP BY `date`,house_id,`limit` ",
+        " GROUP BY `date`,house_id,`limit` ",
       {
         type: QueryTypes.SELECT,
       }
@@ -69,8 +72,12 @@ exports.getHouseFilter = async (req, res, next) => {
     //     }
     //   }
 
+    console.log(filter);
+
     let activeHouse = filter.reduce((acc, el) => {
-      if (el.limit - el.totalPet > +amountPet) {
+      console.log("limit", el.limit);
+      console.log("totalPet", el.totalPet);
+      if (el.limit - el.totalPet < +amountPet) {
         acc.push(el.houseId);
       }
       return acc;
@@ -79,6 +86,8 @@ exports.getHouseFilter = async (req, res, next) => {
     // console.log(activeHouse);
 
     const payload = {};
+
+    console.log(activeHouse);
 
     payload.id = {
       [Op.not]: activeHouse,
