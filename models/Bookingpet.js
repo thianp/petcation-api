@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
       },
       age: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       species: {
         type: DataTypes.STRING,
