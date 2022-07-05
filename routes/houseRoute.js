@@ -6,6 +6,7 @@ const houseController = require("../controllers/houseController");
 const router = express.Router();
 
 router.get("/user", houseController.getHouseByUserId);
+// router.get("/limitHouse", houseController.getHouseByUserId);
 router.get("/limitHouse/:id", houseController.getHouseLimit);
 router.post(
   "/create",
