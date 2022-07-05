@@ -109,7 +109,6 @@ exports.getHouseFilter = async (req, res, next) => {
     console.log(userId);
 
     if (province !== undefined && province !== "") {
-      console.log("jjjjj");
       const houses = await House.findAll({
         where: {
           id: {
