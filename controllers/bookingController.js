@@ -222,7 +222,11 @@ exports.getSingleBooking = async (req, res, next) => {
     const { bookingId } = req.params;
     const booking = await Booking.findOne({
       where: { id: bookingId },
-      include: [{ model: House }, { model: Bookingpet }],
+      include: [
+        { model: Bookinghouse, include: [{ model: Host }] },
+        { model: Bookingpet },
+        { model: Bookingcustomer },
+      ],
     });
     res.json({ booking });
   } catch (err) {
@@ -256,7 +260,11 @@ exports.getHostBookings = async (req, res, next) => {
     }
     const bookings = await Booking.findAll({
       where: { houseId: hostHouse.id },
-      include: [{ model: House }, { model: Bookingpet }],
+      include: [
+        { model: Bookinghouse, include: [{ model: Host }] },
+        { model: Bookingpet },
+        { model: Bookingcustomer },
+      ],
     });
     res.json({ bookings });
   } catch (err) {
