@@ -235,7 +235,11 @@ exports.getGuestBookings = async (req, res, next) => {
     const { id } = req.user;
     const bookings = await Booking.findAll({
       where: { userId: id },
-      include: [{ model: House }, { model: Bookingpet }],
+      include: [
+        { model: Bookinghouse, include: [{ model: Host }] },
+        { model: Bookingpet },
+        { model: Bookingcustomer },
+      ],
     });
     res.json({ bookings });
   } catch (err) {
