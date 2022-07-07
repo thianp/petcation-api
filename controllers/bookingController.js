@@ -51,22 +51,24 @@ exports.createBooking = async (req, res, next) => {
       );
 
       // create bookingpets
-      petIds.map(async (petId, idx) => {
-        const pet = await Pet.findOne({
-          where: { id: petId },
-          attributes: {
-            exclude: ["id", "createdAt", "updatedAt"],
-          },
-        });
-        if (pet) {
-          await Bookingpet.create(
-            { ...pet.dataValues, bookingId: booking.id },
-            { transaction: t }
-          );
-        } else {
-          createError("Pet not found");
-        }
-      });
+      await Promise.all(
+        petIds.map(async (petId, idx) => {
+          const pet = await Pet.findOne({
+            where: { id: petId },
+            attributes: {
+              exclude: ["id", "createdAt", "updatedAt"],
+            },
+          });
+          if (pet) {
+            await Bookingpet.create(
+              { ...pet.dataValues, bookingId: booking.id },
+              { transaction: t }
+            );
+          } else {
+            createError("Pet not found");
+          }
+        })
+      );
 
       // find house
       house = await House.findOne({
