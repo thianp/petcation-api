@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       weight: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
       },
       age: {
         type: DataTypes.STRING,
