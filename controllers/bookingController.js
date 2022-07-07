@@ -74,7 +74,7 @@ exports.createBooking = async (req, res, next) => {
       house = await House.findOne({
         where: { id: houseId },
         attributes: {
-          exclude: ["id", "createdAt", "updatedAt"],
+          exclude: ["id", "createdAt", "updatedAt", "pinAddress", "location"],
         },
       });
       if (!house) {
