@@ -14,6 +14,7 @@ router.post(
   houseController.createHouse
 );
 router.patch('/update', houseController.updateHouse);
+router.patch('/update/pin', houseController.updatePinHouse);
 router.patch(
   '/update/image',
   upload.fields([

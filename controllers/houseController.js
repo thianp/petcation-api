@@ -4,10 +4,10 @@ const {
   SubDistrict,
   House,
   Filterdate,
-} = require("../models");
-const cloudinary = require("../utils/cloudinary");
-const fs = require("fs");
-const createError = require("../utils/createError");
+} = require('../models');
+const cloudinary = require('../utils/cloudinary');
+const fs = require('fs');
+const createError = require('../utils/createError');
 
 exports.getHouseByUserId = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ exports.getHouseByUserId = async (req, res, next) => {
     const myHouse = await House.findOne({ where: { userId: id } });
 
     if (!myHouse) {
-      createError("My House not found", 400);
+      createError('My House not found', 400);
     }
 
     res.status(200).json(myHouse);
@@ -63,6 +63,8 @@ exports.createHouse = async (req, res, next) => {
       isPickupDropOff,
       isLitterChangedDaily,
       isAirFilter,
+      pinAddress,
+      location,
     } = req.body;
 
     let allPic = [];
@@ -129,6 +131,8 @@ exports.createHouse = async (req, res, next) => {
       isPickupDropOff,
       isLitterChangedDaily,
       isAirFilter,
+      pinAddress,
+      location,
     });
     res.status(201).json({ house });
   } catch (err) {
@@ -177,7 +181,7 @@ exports.updateHouseImage = async (req, res, next) => {
     const myHouse = await House.findOne({ where: { userId: id } });
 
     if (!myHouse) {
-      createError("house not found", 400);
+      createError('house not found', 400);
     }
 
     const { image } = myHouse;
@@ -251,9 +255,9 @@ exports.updateHouseImage = async (req, res, next) => {
     }
 
     if (deletePic) {
-      deletePic.split(",").map(async (el) => {
-        const splited = el.split("/");
-        const publicId = splited[splited.length - 1].split(".")[0];
+      deletePic.split(',').map(async (el) => {
+        const splited = el.split('/');
+        const publicId = splited[splited.length - 1].split('.')[0];
         await cloudinary.destroy(publicId);
       });
     }
@@ -272,8 +276,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.cover) {
         if (req?.files?.cover[0] !== objImage[0]) {
           if (objImage[0]) {
-            const splited = objImage[0].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[0].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           coverRes = await cloudinary.upload(req.files.cover[0].path);
@@ -292,8 +296,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic1) {
         if (req?.files?.pic1[0] !== objImage[1]) {
           if (objImage[1]) {
-            const splited = objImage[1].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[1].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res1 = await cloudinary.upload(req.files.pic1[0].path);
@@ -312,8 +316,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic2) {
         if (req?.files?.pic2[0] !== objImage[2]) {
           if (objImage[2]) {
-            const splited = objImage[2].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[2].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res2 = await cloudinary.upload(req.files.pic2[0].path);
@@ -332,8 +336,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic3) {
         if (req?.files?.pic3[0] !== objImage[3]) {
           if (objImage[3]) {
-            const splited = objImage[3].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[3].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res3 = await cloudinary.upload(req.files.pic3[0].path);
@@ -352,8 +356,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic4) {
         if (req?.files?.pic4[0] !== objImage[4]) {
           if (objImage[4]) {
-            const splited = objImage[4].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[4].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res4 = await cloudinary.upload(req.files.pic4[0].path);
@@ -372,8 +376,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic5) {
         if (req?.files?.pic5[0] !== objImage[5]) {
           if (objImage[5]) {
-            const splited = objImage[5].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[5].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res5 = await cloudinary.upload(req.files.pic5[0].path);
@@ -392,8 +396,8 @@ exports.updateHouseImage = async (req, res, next) => {
       if (req?.files?.pic6) {
         if (req?.files?.pic6[0] !== objImage[6]) {
           if (objImage[6]) {
-            const splited = objImage[6].split("/");
-            const publicId = splited[splited.length - 1].split(".")[0];
+            const splited = objImage[6].split('/');
+            const publicId = splited[splited.length - 1].split('.')[0];
             await cloudinary.destroy(publicId);
           }
           res6 = await cloudinary.upload(req.files.pic6[0].path);
@@ -446,6 +450,32 @@ exports.updateHouseImage = async (req, res, next) => {
   }
 };
 
+exports.updatePinHouse = async (req, res, next) => {
+  try {
+    const { id, pinAddress, location } = req.body;
+
+    const house = await House.findOne({ where: { id } });
+
+    if (!house) {
+      createError(404, 'House not found');
+    }
+
+    if (pinAddress) {
+      house.pinAddress = pinAddress;
+    }
+
+    if (location) {
+      house.location = JSON.stringify(location);
+    }
+
+    await house.save();
+
+    res.json({ house });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.updateHouse = async (req, res, next) => {
   try {
     // const { id } = req.params;
@@ -480,7 +510,7 @@ exports.updateHouse = async (req, res, next) => {
     console.log(findHouseId);
 
     if (!findHouseId) {
-      createError(404, "House not found");
+      createError(404, 'House not found');
     }
 
     const updateValue = await House.update(
